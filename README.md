@@ -3,7 +3,7 @@ data-science-courses
 
 for coursera johns hopkins data science courses
 
-setup r-studio server:
+## Setup r-studio server
 
 On an aws ubuntu instance, I tried to follow instructions at
 http://www.rstudio.com/products/rstudio/download-server/.
@@ -58,6 +58,8 @@ deluser, not userdel.
 
 http://askubuntu.com/questions/345974/what-is-the-difference-between-adduser-and-useradd
 
+----
+
 Actually, I see that the course recommends R version 3.1.1.  To upgrade
 to that, I ran
 ```bash
@@ -69,6 +71,50 @@ to that, I ran
 Then I restarted rstudio-server with verify-installation (not sure if this
 is necessary).  Then, from inside rstudio, I quit rstudio and started
 a new session, and that new session had the new version of R.
+
+----
+
+In one lecture, they give an example and say that you may need the library "UsingR".
+I tried installing this from inside RStudio:
+```R
+> install.packages("UsingR")
+```
+The first time I tried it, I got a lot of errors like:
+```R
+Warning in install.packages :
+  system call failed: Cannot allocate memory
+Warning in install.packages :
+  installation of package 'UsingR' had non-zero exit status
+```
+
+From
+http://stackoverflow.com/questions/21785616/ubuntu-12-04-r-install-packages-does-not-work-no-warning-no-install,
+I decided to try setting up swaps by following the directions at
+https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-12-04
+```bash
+
+ # check to see if there is an existing swap
+ $ sudo swapon -s
+
+ # make sure we have enough disk space free, need at least 256k
+ $ df -h
+
+ # make the swap.  this will only last until the machine is rebooted
+ $ sudo dd if=/dev/zero of=/swapfile bs=1024 count=256k
+ $ sudo mkswap /swapfile
+
+ # results in:
+ # Setting up swapspace version 1, size = 262140 KiB
+ # no label, UUID=2193e5eb-0482-420c-9a7d-53558084fd06
+
+ $ sudo swapon /swapfile
+
+ # confirm that you can see it:
+ $ swapon -s
+
+```
+
+After that, the install.packages command worked.
 
 ----
 
