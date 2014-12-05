@@ -58,6 +58,18 @@ deluser, not userdel.
 
 http://askubuntu.com/questions/345974/what-is-the-difference-between-adduser-and-useradd
 
+Actually, I see that the course recommends R version 3.1.1.  To upgrade
+to that, I ran
+```bash
+  $ sudo add-apt-repository ppa:marutter/rrutter
+  $ sudo apt-get update
+  $ sudo apt-get upgrade
+```
+
+Then I restarted rstudio-server with verify-installation (not sure if this
+is necessary).  Then, from inside rstudio, I quit rstudio and started
+a new session, and that new session had the new version of R.
+
 ----
 
 Here's what I tried to do to add CRAN (but this failed)
