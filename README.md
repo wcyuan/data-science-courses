@@ -17,30 +17,35 @@ and r-base-core, it was not able to install all the dependencies.
 So I undid it and just stuck with the default version, which was
 version 3.0.2 anyway.
 
+```bash
   $ sudo apt-get install r-base
   $ sudo apt-get install gdebi-core
   $ sudo apt-get install libapparmor1 # Required only for Ubuntu, not Debian
   $ wget http://download2.rstudio.org/rstudio-server-0.98.1091-i386.deb
   $ sudo gdebi rstudio-server-0.98.1091-i386.deb
+```
 
 As soon as it is installed, it starts running, and if the machine is bounced
 it will restart when the machine is restarted.  To verify that things are
 working, and to restart rstudio-server run this:
 
+```bash
   $ sudo rstudio-server verify-installation
   rstudio-server stop/waiting
   rstudio-server start/running, process 734
+```
 
 Add port 8787 to the AWS security key's incoming access.
 
-Access the server at
-  http://my-ip:8787/
+Access the server at http://my-ip:8787/
 
 The server uses the system's usernames and passwords.  By default,
 an aws ubuntu server only has user ubuntu and I don't know the
 password.  So we need to set up a new user for rstudio
 
+```bash
   $ sudo adduser <username>
+```
 
 This will prompt you for a password (and some oher stuff that doesn't matter)
 It will also create the home directory.
@@ -57,17 +62,21 @@ http://askubuntu.com/questions/345974/what-is-the-difference-between-adduser-and
 
 Here's what I tried to do to add CRAN (but this failed)
 
+```
   # Add CRAN
   deb http://cran.cnr.Berkeley.edu/bin/linux/ubuntu utopic/
+```
 
-to /etc/apt/sources.list.  Go to SECURE APT on that page to find the command
+to /etc/apt/sources.list.  Go to SECURE APT on that page to find the command to download the gpg key
 
+```bash
    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+```
 
 Then run
 
+```bash
    sudo apt-get update
    sudo apt-get upgrade
    sudo apt-get install r-base
-
-
+```
