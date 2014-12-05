@@ -116,6 +116,14 @@ https://www.digitalocean.com/community/tutorials/how-to-add-swap-on-ubuntu-12-04
 
 After that, the install.packages command worked.
 
+Aside from 'UsingR', I also installed 'ggplot2', 'dplyr', and 'reshape'
+
+----
+
+an intro for programmers
+
+http://www.johndcook.com/blog/r_language_for_programmers/
+
 ----
 
 Here's what I tried to do to add CRAN (but this failed)
