@@ -3,6 +3,18 @@ data-science-courses
 
 for coursera johns hopkins data science courses
 
+## Useful git repos
+
+Notes are at:
+https://github.com/DataScienceSpecialization/courses
+
+But apparently each of the instructors has their own fork:
+https://github.com/bcaffo/courses
+https://github.com/rdpeng/courses
+
+Swirl:
+https://github.com/swirldev/swirl/wiki/Installing-swirl-on-Linux
+
 ## Setup r-studio server
 
 On an aws ubuntu instance, I tried to follow instructions at
