@@ -146,3 +146,12 @@ Then run
    sudo apt-get upgrade
    sudo apt-get install r-base
 ```
+
+Now I know why this failed.  In the first command "utopic" refers to the name of the Ubuntu release.  You have to
+put the right value for your release.  My release is actually "trusty", not "utopic".  You can get the name of your
+release like this:
+
+```bash
+# Grabs your version of Ubuntu as a BASH variable
+CODENAME=`grep CODENAME /etc/lsb-release | cut -c 18-`
+```
