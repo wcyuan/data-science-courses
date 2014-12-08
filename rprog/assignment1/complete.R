@@ -18,4 +18,11 @@ complete <- function(directory, id = 1:332) {
   ## ...
   ## where 'id' is the monitor ID number and 'nobs' is the
   ## number of complete cases
+  ncomplete <- function(id) {
+    fn = formatC(id, width=3, flag="0")
+    fn = paste(fn, ".csv", sep="")
+    data <- read.csv(paste(directory, fn, sep="/"))
+    sum(complete.cases(data))
+  }
+  data.frame(id=id, nobs=vapply(id, ncomplete, numeric(1)))
 }
