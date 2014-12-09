@@ -32,8 +32,43 @@
 
 rankhospital <- function(state, outcome, num = "best") {
   ## Read outcome data
+  NMCOL <- 2
+  STCOL <- 7
+  HACOL <- 11
+  HFCOL <- 17
+  PNCOL <- 23
+  
+  ## Read outcome data
+  data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
   ## Check that state and outcome are valid
+  if (sum(data[,STCOL] == state) <= 0) {
+    stop("invalid state")
+  }
+  
+  if (outcome == "heart attack") {
+    col <- HACOL
+  } else if (outcome == "heart failure") {
+    col <- HFCOL
+  } else if (outcome == "pneumonia") {
+    col <- PNCOL
+  } else {
+    stop("invalid outcome")
+  }
+
+  # fix data type
+  data[,col] <- as.numeric(data[,col])
+  # filter
+  part <- data[data[,STCOL] == state & !is.na(data[,col]), c(NMCOL, col)]
+  # sort
+  part <- part[order(part[,2], part[,1]),]
+  
   ## Return hospital name in that state with the given rank
+  if (num == "best") {
+    num = 1
+  } else if (num == "worst") {
+    num = length(part[,1])
+  }
+  part[num,1]
   ## 30-day death rate
 }
 

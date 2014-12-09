@@ -16,10 +16,38 @@
 # The function should use the following template.
 
 best <- function(state, outcome) {
+  NMCOL <- 2
+  STCOL <- 7
+  HACOL <- 11
+  HFCOL <- 17
+  PNCOL <- 23
+  
   ## Read outcome data
+  data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
   ## Check that state and outcome are valid
+  if (sum(data[,STCOL] == state) <= 0) {
+    stop("invalid state")
+  }
+
+  if (outcome == "heart attack") {
+    col <- HACOL
+  } else if (outcome == "heart failure") {
+    col <- HFCOL
+  } else if (outcome == "pneumonia") {
+    col <- PNCOL
+  } else {
+    stop("invalid outcome")
+  }
   ## Return hospital name in that state with lowest 30-day death
-  ## rate
+  data[,col] <- as.numeric(data[,col])  
+  part <- data[data[,STCOL] == state & !is.na(data[,col]), c(NMCOL, col)]
+
+  # filter by lowest rate
+  part <- part[part[2] == min(part[2]),]
+  # filter by name
+  part <- part[part[1] == min(part[,1]),]
+  part[1,1]
+  ## rate  
 }
 
 # The function should check the validity of its arguments. If an invalid state value is passed to best, the

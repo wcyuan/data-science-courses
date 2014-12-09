@@ -18,10 +18,49 @@
 
 rankall <- function(outcome, num = "best") {
   ## Read outcome data
+  NMCOL <- 2
+  STCOL <- 7
+  HACOL <- 11
+  HFCOL <- 17
+  PNCOL <- 23
+  
+  ## Read outcome data
+  data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+
   ## Check that state and outcome are valid
+  if (outcome == "heart attack") {
+    col <- HACOL
+  } else if (outcome == "heart failure") {
+    col <- HFCOL
+  } else if (outcome == "pneumonia") {
+    col <- PNCOL
+  } else {
+    stop("invalid outcome")
+  }
+  
   ## For each state, find the hospital of the given rank
+
+  # fix data type
+  data[,col] <- as.numeric(data[,col])
+  # filter
+  part <- data[!is.na(data[,col]), c(NMCOL, col, STCOL)]
+  # sort
+  part <- part[order(part[,2], part[,1]),]
+
+  if (num == "best") {
+    num <- 1
+  }
+  out <- aggregate(part, list(part[,3]), FUN=function(p) {
+    n <- if (num == "worst") { length(p) } else { num }
+    p[n]
+  })
+
   ## Return a data frame with the hospital names and the
   ## (abbreviated) state name
+  ex <- out[,c(2,1)]
+  names(ex) <- c("hospital", "state")
+  rownames(ex) <- ex[,2]
+  ex
 }
 
 # NOTE: For the purpose of this part of the assignment (and for efficiency), your function should NOT call
