@@ -1,0 +1,74 @@
+---
+title: "Statistical Inference Course Project Part 2"
+output: pdf_document
+---
+
+Now in the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
+
+1. Load the ToothGrowth data and perform some basic exploratory data analyses 
+
+```{r}
+library('datasets')
+```
+
+2. Provide a basic summary of the data.
+
+```{r}
+summary(ToothGrowth)
+```
+
+The data shows the tooth length of guinea pigs who had been given different amounts of Vitamin C (0.5, 1, and 2mg) with different delivery methods (orange juice or ascorbic acid).  There are 6 possible combinations of dose and delivery method, and each combination has 10 samples.  Here is the mean and standard deviation of each group:
+
+```{r}
+df <- data.frame(aggregate(len ~ dose + supp, data=ToothGrowth, function(x){c(mean=mean(x),sd=sd(x))}))
+df <- do.call(data.frame, df)
+df
+```
+
+Here it is plotted with Vitamin C in green and Ascorbic Acid in red.
+
+```{r}
+plot(len.mean~dose, data=df[df$supp=="VC",], type='l', col='green')
+lines(len.mean~dose, data=df[df$supp=="OJ",], col='red')
+```
+
+Based on the means, it would appear that increasing the dose leads to longer teeth, and delivery via Orange Juice is a bit more effective than via Ascorbic Acid, particularly at low doses.
+
+3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+
+Let us test the hypotheses ($H_{a1}$) that the group with a dose of 2mg has longer teeth than the group with dose 0.5mg, versus the null hypothesis ($H_{01}$) that those two groups have the same mean tooth length.  The 95% confidence interval that we get is
+
+```{r}
+ci <- function(xs, ys) {
+    mx <- mean(xs)
+    sx <- sd(xs)
+    nx <- length(xs)
+    my <- mean(ys)
+    sy <- sd(ys)
+    ny <- length(ys)
+    # pooled variance
+    sp <- sqrt(((nx-1)*sx^2 + (ny-1)*sy^2)/(nx+ny-2))
+    my - mx + c(-1, 1) * qt(0.975, nx+ny-2) * sp * sqrt(1/nx+1/ny)
+  }
+xs <- ToothGrowth[ToothGrowth$dose==0.5, "len"]
+ys <- ToothGrowth[ToothGrowth$dose==2, "len"]
+ci(xs, ys)
+```
+
+The confidence interval does not include 0, so we can reject the null hypothesis.  
+
+Now let us test the hypotheses ($H_{a2}$) that delivery by Ascorbic Acid leads to longer teeth than delivery by Orange Juice, versus the null hypothesis ($H_{02}$) that those two groups have the same mean tooth length.  In this case, 95% confidence interval that we get is
+
+```{r}
+xs <- ToothGrowth[ToothGrowth$supp=="VC", "len"]
+ys <- ToothGrowth[ToothGrowth$supp=="OJ", "len"]
+ci(xs, ys)
+```
+
+Since the confidence interval does include 0, we cannot reject the null hypothesis.  
+
+4. State your conclusions and the assumptions needed for your conclusions. 
+
+From this data, we have reason to believe that a 2mg dose of Vitamin C will increase guinea pig tooth length more than a 0.5mg dose will.  The effect of delivery method is inconclusive when we aggregate across all the given dosages, though further studies with this data may find effects for particular dosages.  
+
+In drawing these conclusions, I am making a number of assumptions.  First, I am assuming that the tooth length vs dose or delivery method is roughly symmetric and bell shaped, so that we can approximate it with a T distribution.  Second, I am assuming that the data is not paired.  It's possible that the data was drawn from the same 10 guinea pigs, but since that is not explicitly stated, I am assuming that it was drawn from 60 separate subjects.  I am also assuming that the variances for all the different groups are the same.  
