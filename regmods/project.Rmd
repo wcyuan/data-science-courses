@@ -24,7 +24,7 @@ sum(mtcars$am==auto)
 
 ##Mileage by Transmission Type
 
-When you regress miles per gallon by transmission type, the mileage difference is quite pronounced.  
+When you create a histogram of mileage versus transmission type (Figure 1 in the appendix), the different is already pretty clear.  We can regress miles per gallon by transmission type, to quantify the effect.  
 ```{r}
 fit <- lm(mpg ~ am, data=mtcars)
 summary(fit)$coefficients
@@ -50,20 +50,26 @@ So it appears that even when considering horsepower, the effect of transmission 
 
 This data suggests that manual transmission vehicles have better mileage than automatic transmission, by as much as 7 miles per gallon, or about 40%.  However, it would be better to have a data set where we could compare sets of cars which are the same except for the transmission.  
 
+\pagebreak
+
 #Appendix
 
 ##Fig 1. Histogram of mileage by transmission
 
-Red is for manual transmission, green for automatic.
+Red is for automatic transmission, green for manual.
 
 ```{r}
 library(ggplot2)
 ggplot(mtcars, aes(mpg, fill=as.factor(am))) + geom_histogram(position='stack', binwidth=2)
 ```
 
-##Fig 2. Residuals by tranmission
+\pagebreak
+
+##Fig 2. Residuals by transmission
+
+Red is for automatic transmission, green for manual.
 
 ```{r}
-plot(resid(fit)[mtcars$am==F], col='red')
-points(resid(fit)[mtcars$am==T], col='green')
+plot(resid(fit)[mtcars$am==auto], col='red')
+points(resid(fit)[mtcars$am==manual], col='green')
 ```
