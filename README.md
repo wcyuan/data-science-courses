@@ -59,7 +59,7 @@ password.  So we need to set up a new user for rstudio
   $ sudo adduser <username>
 ```
 
-This will prompt you for a password (and some oher stuff that doesn't matter)
+This will prompt you for a password (and some other stuff that doesn't matter)
 It will also create the home directory.
 
 adduser is a perl wrapper around the lower level command 'useradd'.  If
